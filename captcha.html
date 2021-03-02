@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    <title>captcha validation</title>
+
+    <style>
+        
+
+        .field{
+            
+            margin:20px;
+            
+        }
+
+        input[type="email"],input[type="password"],input[type="text"]{
+
+           
+            left:25%;
+            height:25px;
+            width:200px;
+
+
+        }
+        #captcha-form{
+            width:50%;
+            position:absolute;
+            left:35%;
+            top:10%;
+           
+        }
+        #exprsn{
+            position:static;
+            width:70px;
+            margin-right: 10px;
+            margin-left:100px;
+            text-align: center;
+        }
+        #refresh{
+            
+            outline:none;
+            border:none;
+            cursor:pointer;
+            width:50px;
+            height:50px;
+            background-color: transparent;
+        }
+
+        .fas{
+           
+            font-size: 2em;
+            color:rgba(8, 51, 170, 0.788)
+        }
+
+        .labl{
+            margin-right:30px
+        }
+        #pwd1{
+            margin-left:42px;
+        }
+        #pwd2{
+            margin-left:-5px;
+        }
+
+        #result{
+        
+
+            margin-left:15px;
+        }
+
+        #submit{
+            display: block;
+            width:360px;
+            height:35px;
+            font-size: 20px;
+            color:white;
+            background-color: grey;
+            border:rgb(255, 239, 239) 2px solid;
+            border-radius: 6px;
+            margin-left:22px;
+        }
+        #errormsg{
+            display: block;
+            margin-top:5px;
+            margin-left:25%;
+            color:red;
+            
+        }
+
+        /*#result:active  + #errormsg{
+            display: none;
+
+        } */
+        #result:focus  + #errormsg{
+            visibility: hidden;
+            
+
+        }
+        
+        
+
+    </style>
+</head>
+<body onload="genCaptcha()">
+
+    <form onsubmit="return validateCaptcha()" method="post" id="captcha-form">
+
+        <div class="mail field">
+            <label  class="labl">Enter Your Email</label>
+            <input type="email" name="mail"  id="mail" class="ip" required >
+        </div>
+       
+
+        <div class="password field">
+            <label clss="labl" >Enter Password</label>
+            <input type="password" id="pwd1"  class="ip" name="pwd1">
+        </div>
+        
+
+        <div class="password field">
+            <label class="labl" >Confirm Password</label>
+            <input type="password" id="pwd2" class="ip" name="pwd2">
+        </div>
+
+        <div class="captcha-result field">
+            <label >Enter captcha Result</label>
+            <input type="text" name="result" id="result" >
+            <span id="errormsg"></span>
+        </div>
+
+        <div class="captcha field">
+            <input type="text" name="exprsn" id="exprsn" readonly required>
+            <button id="refresh" onclick="genCaptcha()"> <i class="fas fa-sync-alt"></i></button> 
+            
+        </div>
+
+       
+
+        <div class="submit">
+            <input type="submit" value="Sign Up" id="submit">
+        </div>
+
+
+       
+    
+    
+    </form>
+
+
+    <script>
+
+        function genCaptcha(){
+            var expr= document.getElementById('exprsn');
+
+            var num1= Math.round((100-10)*Math.random() +10 );
+
+            var num2= Math.round((100-10)*Math.random() + 10);
+
+            var operations = ['*','/','+','-']
+
+            var x= (Math.round(10*Math.random()))%4;
+
+            var op =operations[x];
+            
+            var compute = num1 + op  + num2
+
+            expr.value=compute
+        }
+
+        function validateCaptcha(){
+            var expr= document.getElementById('exprsn').value;
+            var result= document.getElementById('result').value;
+
+
+
+            temp =Math.round(eval(expr))
+
+            if (result == ""){
+
+                document.getElementById("errormsg").innerHTML = "Please Enter captcha result";
+
+                return false;
+               // document.getElementById("errormsg").style.visibility = "visible";
+
+            }
+
+            else{
+                    
+                    if (temp != result){
+                        
+                        document.getElementById("errormsg").innerHTML = "wrong captcha result";
+
+                        return false;
+                        
+
+                       // document.getElementById("errormsg").style.visibility = "visible";
+
+                        /* err()
+
+                        function err()  {setTimeout(function() {
+                            
+                            document.getElementById("errormsg").style.visibility = "hide";
+
+                            }, 15000); } */
+                                    
+                    }
+                }
+
+        }
+
+       document.getElementById("result").addEventListener("keyup", function(e){
+            if(e.keyCode == 13){
+                validateCaptcha()
+            }
+        });
+    </script>
+    
+</body>
+</html>
